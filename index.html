@@ -1,0 +1,241 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- 基础 SEO -->
+    <title>小鹅计算器</title>
+    <meta name="description" content="小鹅计算器是一款专为iPad设计的在线科学计算器，支持三角函数、个性化设置、横竖屏适配，完全免费使用。">
+    <meta name="keywords" content="ipad计算器,ipad科学计算器,在线计算器,数学计算,三角函数计算,免费计算器">
+    <meta name="author" content="Minecraft_goose">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://minecraftgoose.github.io/calculator1.0.6/">
+
+    <!-- 结构化数据标记 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "小鹅计算器",
+      "description": "专为iPad设计的在线科学计算器",
+      "url": "https://minecraftgoose.github.io/calculator1.0.6/",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "CNY"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Minecraft_goose"
+      }
+    }
+    </script>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="小鹅计算器 - iPad科学计算器">
+    <meta property="og:description" content="专为iPad设计的免费在线科学计算器，支持三角函数、个性化设置和响应式设计">
+    <meta property="og:image" content="https://minecraftgoose.github.io/calculator1.0.6/icon-512.png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:url" content="https://minecraftgoose.github.io/calculator1.0.6/">
+    <meta property="og:site_name" content="小鹅计算器">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="zh_CN">
+
+    <!-- Twitter 卡片 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="小鹅计算器 - iPad科学计算器">
+    <meta name="twitter:description" content="专为iPad设计的免费在线科学计算器">
+    <meta name="twitter:image" content="https://minecraftgoose.github.io/calculator1.0.6/icon-512.png">
+
+    <!-- 网站图标配置 -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+    <link rel="manifest" href="site.webmanifest">
+    
+    <!-- 主题色 -->
+    <meta name="theme-color" content="#000000">
+    <meta name="msapplication-TileColor" content="#000000">
+    
+    <!-- 外部资源 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- iOS Safari PWA 配置 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="小鹅计算器">
+    
+    <!-- Android Chrome PWA 配置 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- 微软磁贴配置 -->
+    <meta name="msapplication-config" content="browserconfig.xml">
+
+</head>
+<body>
+    <!-- 横屏提示 -->
+    <div class="landscape-warning">
+        <i class="fas fa-mobile-alt"></i>
+        <h2>请将手机竖屏使用</h2>
+        <p>计算器在竖屏模式下体验更佳，横屏模式可能会导致显示异常</p>
+    </div>
+    
+    <!-- 导航栏 -->
+    <div class="nav-bar">
+        <button class="nav-button" id="themeToggle">
+            <i class="fas fa-moon"></i>
+        </button>
+        <button class="nav-button" id="settingsButton">
+            <i class="fas fa-cog"></i>
+        </button>
+    </div>
+    
+    <div class="calculator">
+        <div class="display">
+            <div class="overflow-indicator" id="overflowIndicator">!</div>
+            <div class="display-history" id="history"></div>
+            <div class="display-current" id="display">0</div>
+        </div>
+        
+        <div class="buttons-container">
+            <!-- 科学计算按钮行 -->
+            <div class="scientific-buttons">
+                <button class="btn-scientific" onclick="calculateScientific('sin')">sin</button>
+                <button class="btn-scientific" onclick="calculateScientific('cos')">cos</button>
+                <button class="btn-scientific" onclick="calculateScientific('tan')">tan</button>
+                <!-- 将CE改为cot -->
+                <button class="btn-scientific" onclick="calculateScientific('cot')">cot</button>
+            </div>
+            
+            <div class="buttons">
+                <button class="btn-clear" onclick="clearAll()">AC</button>
+                <button class="btn-special" onclick="toggleSign()">±</button>
+                <button class="btn-special" onclick="appendPercent()">%</button>
+                <button class="btn-operator" onclick="appendOperator('/')">÷</button>
+                
+                <button class="btn-number" onclick="appendNumber('7')">7</button>
+                <button class="btn-number" onclick="appendNumber('8')">8</button>
+                <button class="btn-number" onclick="appendNumber('9')">9</button>
+                <button class="btn-operator" onclick="appendOperator('*')">×</button>
+                
+                <button class="btn-number" onclick="appendNumber('4')">4</button>
+                <button class="btn-number" onclick="appendNumber('5')">5</button>
+                <button class="btn-number" onclick="appendNumber('6')">6</button>
+                <button class="btn-operator" onclick="appendOperator('-')">−</button>
+                
+                <button class="btn-number" onclick="appendNumber('1')">1</button>
+                <button class="btn-number" onclick="appendNumber('2')">2</button>
+                <button class="btn-number" onclick="appendNumber('3')">3</button>
+                <button class="btn-operator" onclick="appendOperator('+')">+</button>
+                
+                <button class="btn-number zero" onclick="appendNumber('0')">0</button>
+                <button class="btn-number" onclick="appendDecimal()">.</button>
+                <button class="btn-equals" onclick="calculate()">=</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 设置面板 -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-panel">
+            <div class="settings-header">
+                <h2 class="settings-title">设置</h2>
+                <button class="close-settings" id="closeSettings">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="settings-section">
+                <h3 class="settings-section-title">显示设置</h3>
+                
+                <div class="setting-item">
+                    <div class="setting-label">
+                        数字分组显示
+                        <span class="setting-description">使用千位分隔符显示大数字</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="digitGrouping">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">
+                        小数位数
+                        <span class="setting-description">设置计算结果保留的小数位数</span>
+                    </div>
+                    <select class="settings-select" id="decimalPlaces">
+                        <option value="0">0位</option>
+                        <option value="1">1位</option>
+                        <option value="2" selected>2位</option>
+                        <option value="3">3位</option>
+                        <option value="4">4位</option>
+                        <option value="5">5位</option>
+                        <option value="6">6位</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h3 class="settings-section-title">操作设置</h3>
+                
+                <div class="setting-item">
+                    <div class="setting-label">
+                        振动反馈
+                        <span class="setting-description">点击按钮时产生振动反馈</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="vibrationFeedback">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h3 class="settings-section-title">关于</h3>
+                
+                <div class="setting-item">
+                    <div class="setting-label">
+                        版本信息
+                        <span class="setting-description">小鹅计算器 v1.0.6</span>
+                    </div>
+                </div>
+                
+                <!-- 新增：打赏作者部分 -->
+                <div class="setting-item donate-section">
+                    <div class="setting-label">
+                        打赏作者
+                        <span class="setting-description">支持开发者继续改进应用</span>
+                    </div>
+                    <div class="donate-image-container">
+                        <img src="donate.png" alt="打赏二维码" class="donate-image" id="donateImage">
+                        <span class="donate-hint">点击查看大图</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 大图查看模态框 -->
+    <div class="donate-modal" id="donateModal">
+        <div class="donate-modal-content">
+            <button class="close-donate" id="closeDonate">
+                <i class="fas fa-times"></i>
+            </button>
+            <h3>感谢您的支持！</h3>
+            <p>您的打赏将激励我继续改进应用</p>
+            <img src="donate.png" alt="打赏二维码大图" class="donate-image-large">
+            <p class="donate-tip">谢谢打赏</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

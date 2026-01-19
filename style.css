@@ -1,0 +1,1083 @@
+﻿:root {
+    --primary-bg: #000;
+    --display-bg: #000;
+    --btn-dark: #333;
+    --btn-gray: #a5a5a5;
+    /* 深色模式紫色 */
+    --btn-purple: #9c27b0;
+    --btn-purple-active: #ba68c8;
+    --text-light: #fff;
+    --text-dark: #000;
+    --nav-bg: rgba(0, 0, 0, 0.8);
+    --modal-bg: rgba(0, 0, 0, 0.7);
+    --settings-bg: #1c1c1c;
+    --separator: #333;
+    --btn-gap: 2vw;
+    --btn-padding: 2vh 5vw 5vh;
+}
+
+/* 浅色模式变量 - 调整紫色为更浅的色调 */
+.light-mode {
+    --primary-bg: #f0f0f0;
+    --display-bg: #f0f0f0;
+    --btn-dark: #e0e0e0;
+    --btn-gray: #d4d4d4;
+    /* 浅色模式紫色调浅，提高可见性 */
+    --btn-purple: #b39ddb; /* 更浅的紫色 */
+    --btn-purple-active: #ceb5f7; /* 更浅的活跃紫色 */
+    --text-light: #000;
+    --text-dark: #000;
+    --nav-bg: rgba(240, 240, 240, 0.9);
+    --modal-bg: rgba(0, 0, 0, 0.5);
+    --settings-bg: #f9f9f9;
+    --separator: #ddd;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: var(--primary-bg);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* 改为顶部对齐，让计算器上移 */
+    padding: 0;
+    margin: 0;
+    transition: background-color 0.3s ease;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    /* 防止内容被底部导航栏遮挡 */
+    min-height: -webkit-fill-available;
+}
+
+/* 修复iOS Safari 100vh问题 */
+@supports (-webkit-touch-callout: none) {
+    body {
+        height: -webkit-fill-available;
+    }
+}
+
+.landscape-warning {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    color: white;
+    z-index: 1000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
+}
+
+.landscape-warning i {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    animation: rotate 1.5s infinite ease-in-out;
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(90deg); }
+}
+
+.landscape-warning h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.landscape-warning p {
+    font-size: 1.2rem;
+    opacity: 0.8;
+    max-width: 80%;
+    line-height: 1.5;
+}
+
+.nav-bar {
+    position: fixed;
+    top: max(10px, env(safe-area-inset-top));
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90vw;
+    max-width: 600px;
+    height: 45px;
+    background-color: var(--nav-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.nav-button:active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.calculator {
+    width: 90vw;
+    height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 10px); /* 减少高度，上移 */
+    max-width: 600px;
+    max-height: 90vh;
+    background-color: var(--primary-bg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    margin: auto;
+    border-radius: 24px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    background: var(--primary-bg);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-top: max(50px, env(safe-area-inset-top) + 10px); /* 减少上边距，让计算器更靠近顶部 */
+    margin-bottom: max(10px, env(safe-area-inset-bottom));
+}
+
+.calculator::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(
+        135deg, 
+        rgba(255, 255, 255, 0.05) 0%, 
+        rgba(255, 255, 255, 0) 30%,
+        rgba(0, 0, 0, 0.1) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 24px;
+}
+
+.display {
+    flex: 1;
+    padding: 3vh 5vw 2vh; /* 减少显示区域的内边距 */
+    text-align: right;
+    background-color: var(--display-bg);
+    color: var(--text-light);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    border-radius: 24px 24px 0 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.05),
+        transparent
+    );
+}
+
+.display-history {
+    font-size: 1.6rem;
+    margin-bottom: 1.5vh; /* 减少历史记录和当前显示的间距 */
+    min-height: 2.5rem;
+    opacity: 0.7;
+    overflow-x: auto;
+    white-space: nowrap;
+    max-width: 100%;
+    color: #888;
+}
+
+.display-current {
+    font-size: 3.8rem;
+    font-weight: 300;
+    overflow-x: auto;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.display-current.medium-font {
+    font-size: 3.8rem;
+}
+
+.display-current.small-font {
+    font-size: 3rem;
+}
+
+.display-current.xsmall-font {
+    font-size: 2.5rem;
+}
+
+.display-current.xxsmall-font {
+    font-size: 2rem;
+}
+
+.display-current.xxxsmall-font {
+    font-size: 1.7rem;
+}
+
+.display-history.medium-font {
+    font-size: 1.5rem;
+}
+
+.display-history.small-font {
+    font-size: 1.3rem;
+}
+
+.display-history.xsmall-font {
+    font-size: 1.1rem;
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    border-radius: 0 0 24px 24px;
+    overflow: hidden;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1vw;
+    padding: 8px 5vw 12px; /* 减少按钮区域的内边距 */
+    background-color: var(--primary-bg);
+    flex: 1;
+    grid-auto-rows: 1fr;
+    min-height: 0;
+    align-content: stretch;
+}
+
+button {
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--btn-dark);
+    color: var(--text-light);
+    font-weight: 500;
+    transform: scale(1);
+    box-shadow: 
+        0 6px 12px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    aspect-ratio: 1/1;
+    min-width: 48px;
+    min-height: 48px;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+button:active {
+    transform: scale(0.95);
+    opacity: 0.8;
+    transition: transform 0.1s ease;
+}
+
+.btn-operator {
+    background-color: var(--btn-purple);
+    color: var(--text-light);
+    box-shadow: 
+        0 6px 12px rgba(156, 39, 176, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.btn-operator:active {
+    background-color: var(--btn-purple-active);
+}
+
+.btn-equals {
+    background-color: var(--btn-purple);
+    color: var(--text-light);
+    box-shadow: 
+        0 6px 12px rgba(156, 39, 176, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.btn-equals:active {
+    background-color: var(--btn-purple-active);
+}
+
+.btn-clear {
+    background-color: var(--btn-gray);
+    color: var(--text-dark);
+    box-shadow: 
+        0 6px 12px rgba(165, 165, 165, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+}
+
+.btn-clear:active {
+    background-color: #bbb;
+}
+
+.btn-special {
+    background-color: var(--btn-gray);
+    color: var(--text-dark);
+    box-shadow: 
+        0 6px 12px rgba(165, 165, 165, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+}
+
+.btn-special:active {
+    background-color: #bbb;
+}
+
+.btn-scientific {
+    background-color: #555;
+    color: var(--text-light);
+    font-size: 1.8rem;
+}
+
+.btn-scientific:active {
+    background-color: #777;
+}
+
+/* 0按钮基础样式 */
+.zero {
+    grid-column: span 2;
+    aspect-ratio: 2/1;
+    min-height: 0;
+}
+
+.display-current::-webkit-scrollbar, 
+.display-history::-webkit-scrollbar {
+    height: 5px;
+}
+
+.display-current::-webkit-scrollbar-track, 
+.display-history::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.display-current::-webkit-scrollbar-thumb, 
+.display-history::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+}
+
+button {
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.overflow-indicator {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    color: #ff6b6b;
+    font-size: 1.2rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.overflow-indicator.show {
+    opacity: 1;
+}
+
+.settings-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--modal-bg);
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: flex-end;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.settings-panel {
+    background-color: var(--settings-bg);
+    width: 100%;
+    max-width: 500px;
+    border-radius: 20px 20px 0 0;
+    padding: 30px 20px calc(20px + env(safe-area-inset-bottom));
+    color: var(--text-light);
+    max-height: 80vh;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-out;
+}
+
+.settings-modal.active .settings-panel {
+    transform: translateY(0);
+}
+
+.settings-modal.active {
+    display: flex;
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--separator);
+}
+
+.settings-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.close-settings {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.close-settings:active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.settings-section {
+    margin-bottom: 30px;
+}
+
+.settings-section-title {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #aaa;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--separator);
+}
+
+.setting-label {
+    font-size: 1.1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.setting-description {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-top: 5px;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #555;
+    transition: .4s;
+    border-radius: 30px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--btn-purple);
+}
+
+input:checked + .slider:before {
+    transform: translateX(30px);
+}
+
+.settings-select {
+    background-color: var(--btn-dark);
+    color: var(--text-light);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    min-width: 100px;
+}
+
+/* 科学计算按钮行 - 默认隐藏 */
+.scientific-buttons {
+    display: none;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--btn-gap);
+    padding: 10px 5vw 0;
+    background-color: var(--primary-bg);
+}
+
+/* 打赏相关样式 */
+.donate-section {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: 20px;
+}
+
+.donate-image-container {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.donate-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    border: 2px solid var(--btn-purple);
+    padding: 5px;
+    background: white;
+}
+
+.donate-image:hover {
+    transform: scale(1.05);
+}
+
+.donate-image:active {
+    transform: scale(0.95);
+}
+
+.donate-hint {
+    font-size: 0.9rem;
+    color: var(--btn-purple);
+    margin-top: 8px;
+    opacity: 0.8;
+}
+
+/* 打赏大图模态框 */
+.donate-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 2000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 20px;
+}
+
+.donate-modal.active {
+    display: flex;
+}
+
+.donate-modal-content {
+    background-color: var(--settings-bg);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.close-donate {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.close-donate:active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.donate-modal-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: var(--text-light);
+}
+
+.donate-modal-content p {
+    font-size: 1rem;
+    color: #aaa;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.donate-image-large {
+    width: 250px;
+    height: 250px;
+    max-width: 100%;
+    border-radius: 15px;
+    border: 3px solid var(--btn-purple);
+    padding: 10px;
+    background: white;
+    margin-bottom: 15px;
+}
+
+.donate-tip {
+    font-size: 0.9rem;
+    color: var(--btn-purple);
+    font-weight: 500;
+}
+
+@media (max-height: 600px) and (orientation: landscape) and (max-width: 900px) {
+    .landscape-warning {
+        display: flex !important;
+    }
+    
+    .calculator, .nav-bar, .settings-modal, .donate-modal {
+        display: none !important;
+    }
+}
+
+/* 横屏模式下的修复 - 将计算器居中显示 */
+@media (orientation: landscape) and (min-width: 901px) {
+    :root {
+        --btn-gap: 8px;
+        --btn-padding: 15px;
+    }
+    
+    .calculator {
+        flex-direction: row;
+        padding-top: 0;
+        max-width: 1200px;
+        max-height: 600px;
+        width: 95vw;
+        height: 80vh;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        /* 关键修复：使用绝对定位居中 */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0 !important; /* 移除所有margin */
+    }
+    
+    .display {
+        flex: 2;
+        padding: 20px 30px;
+        border-radius: 20px 0 0 20px;
+        justify-content: center;
+    }
+    
+    .buttons-container {
+        flex: 1.5;
+        display: flex;
+        flex-direction: column;
+        border-radius: 0 20px 20px 0;
+        overflow: hidden;
+        height: 100%;
+    }
+    
+    .scientific-buttons {
+        display: grid;
+        padding: 15px 15px 5px;
+        margin: 0;
+        flex: 0 0 auto;
+        height: 60px;
+    }
+    
+    .buttons {
+        flex: 1;
+        grid-template-columns: repeat(4, 1fr);
+        background-color: var(--primary-bg);
+        padding: 8px 15px 12px;
+        grid-auto-rows: 1fr;
+        height: calc(100% - 60px);
+        min-height: 0;
+        gap: 8px;
+    }
+    
+    button {
+        font-size: 1.7rem;
+        border-radius: 12px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        height: 100%;
+        width: 100%;
+    }
+    
+    .btn-scientific {
+        font-size: 1.4rem;
+    }
+    
+    .display-current {
+        font-size: 3.5rem;
+    }
+    
+    .display-history {
+        font-size: 1.5rem;
+    }
+    
+    .nav-bar {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 1100px;
+        background-color: var(--nav-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        z-index: 100;
+    }
+    
+    .nav-button {
+        color: var(--text-light);
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    /* 0按钮高度问题彻底修复 */
+    .zero {
+        aspect-ratio: 2/1;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .settings-panel {
+        max-width: 600px;
+        border-radius: 20px;
+        margin-bottom: 0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .settings-modal.active {
+        align-items: center;
+    }
+    
+    /* 横屏模式下的打赏样式 */
+    .donate-image {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .donate-modal-content {
+        max-width: 500px;
+    }
+    
+    .donate-image-large {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+/* 针对大屏幕横屏的额外调整 */
+@media (orientation: landscape) and (min-width: 1200px) {
+    .calculator {
+        max-height: 700px;
+        height: 75vh;
+    }
+    
+    .display-current {
+        font-size: 4rem;
+    }
+    
+    button {
+        font-size: 2rem;
+    }
+}
+
+/* 修复横屏时的小屏幕设备 */
+@media (orientation: landscape) and (max-height: 500px) {
+    .calculator {
+        height: 90vh;
+        max-height: 350px;
+    }
+    
+    .display-current {
+        font-size: 2.5rem;
+    }
+    
+    button {
+        font-size: 1.5rem;
+        border-radius: 8px;
+    }
+    
+    .btn-scientific {
+        font-size: 1.2rem;
+    }
+    
+    .scientific-buttons {
+        height: 50px;
+    }
+    
+    .buttons {
+        height: calc(100% - 50px);
+    }
+}
+
+@media (orientation: landscape) and (min-width: 1400px) {
+    :root {
+        --btn-gap: 6px;
+    }
+    
+    button {
+        font-size: 1.9rem;
+    }
+    
+    .btn-scientific {
+        font-size: 1.6rem;
+    }
+    
+    .display-current {
+        font-size: 4rem;
+    }
+    
+    /* 大平板0按钮同步修复 */
+    .zero {
+        aspect-ratio: 2/1;
+        height: 100%;
+    }
+}
+
+@media (max-width: 320px) {
+    .display-current {
+        font-size: 3.5rem;
+    }
+    
+    .display-history {
+        font-size: 1.5rem;
+    }
+    
+    button {
+        font-size: 1.8rem;
+    }
+    
+    /* 小屏幕打赏样式 */
+    .donate-image {
+        width: 130px;
+        height: 130px;
+    }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .display-current {
+        font-size: 2.8rem;
+    }
+    
+    .display-history {
+        font-size: 1.2rem;
+    }
+    
+    button {
+        font-size: 1.5rem;
+    }
+    
+    .btn-scientific {
+        font-size: 1.2rem;
+    }
+    
+    /* 横屏小高度设备打赏样式 */
+    .donate-modal-content {
+        padding: 20px;
+    }
+    
+    .donate-image-large {
+        width: 180px;
+        height: 180px;
+    }
+}
+
+/* 为小屏幕竖屏设备优化 */
+@media (orientation: portrait) and (max-height: 700px) {
+    .calculator {
+        height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 5px); /* 进一步减少高度 */
+        margin-top: max(40px, env(safe-area-inset-top) + 5px); /* 进一步减少上边距 */
+    }
+    
+    .display {
+        padding: 2.5vh 5vw 1.5vh;
+    }
+    
+    .buttons {
+        padding: 6px 5vw 10px;
+        gap: 0.8vw;
+    }
+    
+    .display-current {
+        font-size: 3.2rem;
+    }
+    
+    .display-history {
+        font-size: 1.4rem;
+        margin-bottom: 1vh;
+    }
+    
+    button {
+        font-size: 1.8rem;
+    }
+    
+    .nav-bar {
+        height: 40px;
+        padding: 0 15px;
+        top: max(8px, env(safe-area-inset-top));
+    }
+    
+    .nav-button {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+}
+
+/* 超小屏幕设备 */
+@media (orientation: portrait) and (max-height: 600px) {
+    .calculator {
+        height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+        margin-top: max(30px, env(safe-area-inset-top));
+    }
+    
+    .display {
+        padding: 2vh 5vw 1vh;
+    }
+    
+    .buttons {
+        padding: 4px 5vw 8px;
+    }
+    
+    .display-current {
+        font-size: 2.8rem;
+    }
+    
+    .display-history {
+        font-size: 1.2rem;
+        min-height: 2rem;
+    }
+}
+
+/* 响应式调整 */
+@media (max-width: 480px) {
+    .donate-image-large {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media (max-height: 600px) {
+    .donate-image-large {
+        width: 180px;
+        height: 180px;
+    }
+}
+
+/* 打赏图片加载失败时的备用样式 */
+.donate-image:before {
+    content: "二维码加载失败";
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #666;
+    font-size: 12px;
+    text-align: center;
+}
+
+.donate-image[src=""]:before,
+.donate-image:not([src]):before {
+    display: block;
+}
